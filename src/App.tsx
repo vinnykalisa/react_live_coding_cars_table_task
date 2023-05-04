@@ -25,15 +25,15 @@ interface Props {
 }
 
 const carsWithColors = carsFromServer.map(car => {
-  const carColor = colorsFromServer.find(color => {
-    car.colorId === color.id;
-  })
+  const carColor = colorsFromServer.find(color => (
+    car.colorId === color.id
+  )) || null;
 
-  return ({
+  return {
     ...car,
     carColor,
-  })
-})
+  };
+});
 
 export const App: React.FC<Props> = () => {
   const newCars = [...carsWithColors];
@@ -56,15 +56,16 @@ export const App: React.FC<Props> = () => {
           </tr>
         </thead>
         <tbody>
-          {newCars.map(car => {
-            <>
+          {newCars.map((car) => (
+            <tr>
               <td>{car.id}</td>
               <td>{car.brand}</td>
-              <td style={{color: car.carColor.name}}>{car.carcolor.name}</td>
+              <td style={{ color: car.carColor?.name }}>
+                {car.carColor?.name}
+              </td>
               <td>{car.rentPrice}</td>
-            </>
-          }
-          )}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
