@@ -33,14 +33,14 @@ export const carsWithColors = carsFromServer.map((car: Car) => {
 export const App: React.FC<{}> = () => {
   let newCars = [...carsWithColors];
   const [query, setQuery] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColorId, setSelectedColorId] = useState(0);
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => (
     setQuery(event.target.value)
   );
 
   const handleSelectColor = (event: React.ChangeEvent<HTMLSelectElement>) => (
-    setSelectedColor(event.target.value)
+    setSelectedColorId(+event.target.value)
   );
 
   if (query) {
@@ -51,9 +51,9 @@ export const App: React.FC<{}> = () => {
     ));
   }
 
-  if (selectedColor) {
+  if (selectedColorId) {
     newCars = newCars.filter(car => (
-      car.carColor?.name === selectedColor
+      car.colorId === selectedColorId
     ));
   }
 
@@ -68,12 +68,16 @@ export const App: React.FC<{}> = () => {
 
       <select
         onChange={handleSelectColor}
-        value={selectedColor}
       >
-        <option>Choose a color</option>
+        <option
+          value={0}
+        >
+          Choose a color
+        </option>
         {colorsFromServer.map(color => (
           <option
             key={color.id}
+            value={color.id}
           >
             {color.name}
           </option>
