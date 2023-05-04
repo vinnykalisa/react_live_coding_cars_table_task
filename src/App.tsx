@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import carsFromServer from './api/cars';
 import colorsFromServer from './api/colors';
 
@@ -31,11 +31,29 @@ export const carsWithColors = carsFromServer.map((car: Car) => {
 });
 
 export const App: React.FC<{}> = () => {
-  const newCars = [...carsWithColors];
+  let newCars = [...carsWithColors];
+  const [query, setQuery] = useState('');
+
+  const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => (
+    setQuery(event.target.value)
+  );
+
+  if (query) {
+    const formattedQuery = query.trim();
+
+    newCars = newCars.filter(car => (
+      car.brand.toLowerCase().includes(formattedQuery)
+    ));
+  }
 
   return (
     <div>
-      <input type="search" placeholder="Find by car brand" />
+      <input
+        type="search"
+        placeholder="Find by car brand"
+        value={query}
+        onChange={handleQuery}
+      />
 
       <select>
         <option>Chose a color</option>
